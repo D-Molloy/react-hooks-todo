@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import TodosContext from "../context";
-import todosReducer from "../reducer";
+// import todosReducer from "../reducer";
 
 export default function TodoList() {
   const {
@@ -36,7 +36,10 @@ export default function TodoList() {
                 className="h5"
               />
             </button>
-            <button className="mx-3">
+            <button
+              className="mx-3"
+              onClick={() => dispatch({ type: "REMOVE_TODO", payload: todo })}
+            >
               <img
                 src="https://icon.now.sh/delete/8b0000"
                 alt="delete icon"
