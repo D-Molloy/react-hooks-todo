@@ -29,7 +29,6 @@ export default function App() {
   return (
     <div className="container mx-auto my-8">
       <h1 className="my-8">Greeting, {value}, please click something...</h1>
-
       <button
         onClick={() => dispatch({ type: "increment" })}
         class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
