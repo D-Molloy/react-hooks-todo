@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import TodosContext from "../context";
+import Axios from "axios";
 // import todosReducer from "../reducer";
 
 export default function TodoList() {
@@ -21,9 +22,13 @@ export default function TodoList() {
             className="bg-orange-600 border-black border-dashed border-2 my-2 py-4 flex items-center"
           >
             <span
-              onDoubleClick={() =>
-                dispatch({ type: "TOGGLE_TODO", payload: todo })
-              }
+              onDoubleClick={async () => {
+                const response = await Axios.patch(
+                  `https://hooks-api.denismolloy.now.sh/todos/${todo.id}`,
+                  { complete: !todo.complete }
+                );
+                dispatch({ type: "TOGGLE_TODO", payload: response.data });
+              }}
               className={`flex-1 ml-12 cursor-pointer ${todo.complete &&
                 "line-through text-gray-600"}`}
             >
@@ -43,7 +48,12 @@ export default function TodoList() {
             </button>
             <button
               className="mx-3"
-              onClick={() => dispatch({ type: "REMOVE_TODO", payload: todo })}
+              onClick={async () => {
+                await Axios.delete(
+                  `https://hooks-api.denismolloy.now.sh/todos/${todo.id}`
+                );
+                dispatch({ type: "REMOVE_TODO", payload: todo });
+              }}
             >
               <img
                 src="https://icon.now.sh/delete/8b0000"

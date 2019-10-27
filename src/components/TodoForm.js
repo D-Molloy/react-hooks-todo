@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import TodosContext from "../context";
+import axios from "axios";
+import uuidv4 from "uuid/v4";
 
 export default function TodoForm() {
   const [todo, setTodo] = useState("");
@@ -19,13 +21,21 @@ export default function TodoForm() {
     // update if the todo id changes
   }, [currentTodo.id]);
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     // if currentTodo is set, update the todo, otherwise add a new one
     if (currentTodo.text) {
-      dispatch({ type: "UPDATE_TODO", payload: todo });
+      const response = await axios.patch(
+        `https://hooks-api.denismolloy.now.sh/todos/${currentTodo.id}`,
+        { text: todo }
+      );
+      dispatch({ type: "UPDATE_TODO", payload: response.data });
     } else {
-      dispatch({ type: "ADD_TODO", payload: todo });
+      const response = await axios.post(
+        "https://hooks-api.denismolloy.now.sh/todos",
+        { id: uuidv4(), text: todo, complete: false }
+      );
+      dispatch({ type: "ADD_TODO", payload: response.data });
     }
     setTodo("");
   };
