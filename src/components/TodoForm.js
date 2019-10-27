@@ -1,18 +1,37 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import TodosContext from "../context";
 
 export default function TodoForm() {
   const [todo, setTodo] = useState("");
-  const { dispatch } = useContext(TodosContext);
+
+  // destrucutre currentTodo off of state and give it a default value of {}
+  const {
+    state: { currentTodo = {} },
+    dispatch
+  } = useContext(TodosContext);
+
+  useEffect(() => {
+    if (currentTodo.text) {
+      setTodo(currentTodo.text);
+    } else {
+      setTodo("");
+    }
+    // update if the todo id changes
+  }, [currentTodo.id]);
+
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch({ type: "ADD_TODO", payload: todo });
+    // if currentTodo is set, update the todo, otherwise add a new one
+    if (currentTodo.text) {
+      dispatch({ type: "UPDATE_TODO", payload: todo });
+    } else {
+      dispatch({ type: "ADD_TODO", payload: todo });
+    }
     setTodo("");
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex justify-center p-5">
-      <label htmlFor="todo-input">Add a todo:</label>
       <input
         type="text"
         id="todo-input"

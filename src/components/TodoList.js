@@ -29,7 +29,12 @@ export default function TodoList() {
             >
               {todo.text}
             </span>
-            <button className="mx-3">
+            <button
+              className="mx-3"
+              onClick={() =>
+                dispatch({ type: "SET_CURRENT_TODO", payload: todo })
+              }
+            >
               <img
                 src="https://icon.now.sh/edit/0050c5"
                 alt="edit icon"
